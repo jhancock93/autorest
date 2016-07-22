@@ -149,7 +149,7 @@ namespace AutoRest.CSharp.Azure
 
                 var modelTemplate = new ModelTemplate
                 {
-                    Model = new AzureModelTemplateModel(model),
+                    Model = new AzureModelTemplateModel(model, this.CodeOptions.ModelOptions),
                 };
 
                 await Write(modelTemplate, Path.Combine("Models", model.Name + ".cs"));
@@ -185,7 +185,7 @@ namespace AutoRest.CSharp.Azure
 
                 var exceptionTemplate = new ExceptionTemplate
                 {
-                    Model = new ModelTemplateModel(exceptionType),
+                    Model = new ModelTemplateModel(exceptionType, CodeOptions.ModelOptions),
                 };
                 await Write(exceptionTemplate, Path.Combine("Models", exceptionTemplate.Model.ExceptionTypeDefinitionName + ".cs"));
             }
