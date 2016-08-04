@@ -11,10 +11,12 @@ namespace Fixtures.DateTimeOffset.Models
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
     using Newtonsoft.Json;
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
 
+    [DataContract]
     public partial class Error
     {
         /// <summary>
@@ -26,16 +28,19 @@ namespace Fixtures.DateTimeOffset.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "code")]
+        [DataMember(Name = "code", EmitDefaultValue = false)]
         public int? Code { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "message")]
+        [DataMember(Name = "message", EmitDefaultValue = false)]
         public string Message { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "fields")]
+        [DataMember(Name = "fields", EmitDefaultValue = false)]
         public string Fields { get; set; }
 
     }

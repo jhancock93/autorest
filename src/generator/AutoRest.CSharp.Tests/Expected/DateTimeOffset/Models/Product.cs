@@ -11,10 +11,12 @@ namespace Fixtures.DateTimeOffset.Models
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
     using Newtonsoft.Json;
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
 
+    [DataContract]
     public partial class Product
     {
         /// <summary>
@@ -27,21 +29,25 @@ namespace Fixtures.DateTimeOffset.Models
         /// </summary>
         [JsonConverter(typeof(DateJsonConverter))]
         [JsonProperty(PropertyName = "date")]
+        [DataMember(Name = "date", EmitDefaultValue = false)]
         public DateTime? Date { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "dateTime")]
+        [DataMember(Name = "dateTime", EmitDefaultValue = false)]
         public DateTimeOffset? DateTime { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "dateArray")]
+        [DataMember(Name = "dateArray", EmitDefaultValue = false)]
         public IList<DateTime?> DateArray { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "dateTimeArray")]
+        [DataMember(Name = "dateTimeArray", EmitDefaultValue = false)]
         public IList<DateTimeOffset?> DateTimeArray { get; set; }
 
     }

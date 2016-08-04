@@ -10,9 +10,14 @@ namespace @(Settings.Namespace).Models
     using System;
     using System.Linq;
     using System.Collections.Generic;
+@if (Model.ModelOptions.AddDataContractAttributes)
+{
+@:    using System.Runtime.Serialization;
+}
     using Newtonsoft.Json;
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
+
 @foreach (var usingString in Model.Usings) {
 @:    using @usingString;
 }
@@ -40,7 +45,12 @@ namespace @(Settings.Namespace).Models
     @:[JsonObject("@Model.SerializedName")]
     }
 
-    @if (Model.NeedsTransformationConverter)
+    @if (Model.ModelOptions.AddDataContractAttributes)
+    {
+    @:[DataContract]
+    }
+
+@if (Model.NeedsTransformationConverter)
     {
     @:[JsonTransformation]
     }
@@ -155,6 +165,10 @@ namespace @(Settings.Namespace).Models
             else
             {
         @:[JsonProperty(PropertyName = "@property.SerializedName")]
+            if (Model.ModelOptions.AddDataContractAttributes)
+                {
+        @:[DataMember(Name = "@property.SerializedName", EmitDefaultValue = false)]
+                }
             }
         @:public @property.Type.Name @property.Name { get; @(property.IsReadOnly ? "private " : "")set; }
         @EmptyLine
