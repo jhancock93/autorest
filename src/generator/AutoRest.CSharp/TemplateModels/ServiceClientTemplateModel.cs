@@ -12,7 +12,7 @@ namespace AutoRest.CSharp.TemplateModels
 {
     public class ServiceClientTemplateModel : ServiceClient
     {
-        public ServiceClientTemplateModel(ServiceClient serviceClient, bool internalConstructors)
+        public ServiceClientTemplateModel(ServiceClient serviceClient, bool internalConstructors, IEnumerable<string> additionalNamespaces)
         {
             this.LoadFrom(serviceClient);
             MethodTemplateModels = new List<MethodTemplateModel>();
@@ -20,6 +20,7 @@ namespace AutoRest.CSharp.TemplateModels
                 .ForEach(m => MethodTemplateModels.Add(new MethodTemplateModel(m, serviceClient, SyncMethodsGenerationMode.None)));
             ConstructorVisibility = internalConstructors ? "internal" : "public";
             this.IsCustomBaseUri = serviceClient.Extensions.ContainsKey(SwaggerExtensions.ParameterizedHostExtension);
+            AdditionalNamespaces = new HashSet<string>(additionalNamespaces);
         }
 
         public bool IsCustomBaseUri { get; private set; }
@@ -30,10 +31,12 @@ namespace AutoRest.CSharp.TemplateModels
         {
             get
             {
-                return MethodGroups.Select(mg => new MethodGroupTemplateModel(this, mg));
+                return MethodGroups.Select(mg => new MethodGroupTemplateModel(this, mg, AdditionalNamespaces));
             }
         }
 
+        protected HashSet<string> AdditionalNamespaces { get; private set; }
+         
         public virtual IEnumerable<string> Usings
         {
             get
@@ -42,6 +45,8 @@ namespace AutoRest.CSharp.TemplateModels
                 {
                     yield return this.ModelsName;
                 }
+                foreach (var ns in AdditionalNamespaces)
+                    yield return ns;
             }
         }
 

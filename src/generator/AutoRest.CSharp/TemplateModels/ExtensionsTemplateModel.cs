@@ -10,19 +10,22 @@ namespace AutoRest.CSharp.TemplateModels
 {
     public class ExtensionsTemplateModel : ServiceClient
     {
-        public ExtensionsTemplateModel(ServiceClient serviceClient, string operationName, SyncMethodsGenerationMode syncWrappers)
+        public ExtensionsTemplateModel(ServiceClient serviceClient, string operationName, SyncMethodsGenerationMode syncWrappers, IEnumerable<string> additionalNamespaces)
         {
             this.LoadFrom(serviceClient);
             MethodTemplateModels = new List<MethodTemplateModel>();
             ExtensionName = operationName ?? this.Name;
             this.Methods.Where(m => m.Group == operationName)
                 .ForEach(m => MethodTemplateModels.Add(new MethodTemplateModel(m, serviceClient, syncWrappers)));
+            AdditionalNamespaces = new HashSet<string>(additionalNamespaces);
         }
 
 
         public List<MethodTemplateModel> MethodTemplateModels { get; private set; }
 
         public string ExtensionName { get; set; }
+
+        protected HashSet<string> AdditionalNamespaces { get; private set; }
 
         public virtual IEnumerable<string> Usings
         {
@@ -32,6 +35,8 @@ namespace AutoRest.CSharp.TemplateModels
                 {
                     yield return this.ModelsName;
                 }
+                foreach (var ns in AdditionalNamespaces)
+                    yield return ns;
             }
         }
     }

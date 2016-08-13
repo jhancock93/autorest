@@ -28,5 +28,12 @@ namespace AutoRest.CSharp
         /// </summary>
         [JsonProperty("syncMethods")]
         public SyncMethodsGenerationMode SyncMethods { get; set; }
+
+        /// <summary>
+        /// Allows a client to reference models from another assembly instead of generating new models
+        /// </summary>
+        [JsonProperty("modelAssemblies")]
+        public string[] ExternalModelAssemblies { get; set; }
+
     }
 }

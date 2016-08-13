@@ -12,8 +12,8 @@ namespace AutoRest.CSharp.Azure.TemplateModels
 {
     public class AzureMethodGroupTemplateModel : MethodGroupTemplateModel
     {
-        public AzureMethodGroupTemplateModel(ServiceClient serviceClient, string methodGroupName)
-            : base(serviceClient, methodGroupName)
+        public AzureMethodGroupTemplateModel(ServiceClient serviceClient, string methodGroupName, IEnumerable<string> additionalNamespaces)
+            : base(serviceClient, methodGroupName, additionalNamespaces)
         {
             MethodGroupType = MethodGroupName + "Operations";
             // Clear base initialized MethodTemplateModels and re-populate with
@@ -36,6 +36,8 @@ namespace AutoRest.CSharp.Azure.TemplateModels
                 {
                     yield return this.ModelsName;
                 }
+                foreach (var ns in AdditionalNamespaces)
+                    yield return ns;
             }
         }
     }

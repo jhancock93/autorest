@@ -10,7 +10,7 @@ namespace AutoRest.CSharp.TemplateModels
 {
     public class MethodGroupTemplateModel : ServiceClient
     {
-        public MethodGroupTemplateModel(ServiceClient serviceClient, string methodGroupName)
+        public MethodGroupTemplateModel(ServiceClient serviceClient, string methodGroupName, IEnumerable<string> additionalNamespaces)
         {
             this.LoadFrom(serviceClient);
             MethodTemplateModels = new List<MethodTemplateModel>();
@@ -20,6 +20,7 @@ namespace AutoRest.CSharp.TemplateModels
             MethodGroupType = methodGroupName;
             Methods.Where(m => m.Group == MethodGroupName)
                 .ForEach(m => MethodTemplateModels.Add(new MethodTemplateModel(m, serviceClient, SyncMethodsGenerationMode.None)));
+            AdditionalNamespaces = new HashSet<string>(additionalNamespaces);
         }
 
         public List<MethodTemplateModel> MethodTemplateModels { get; private set; }
@@ -27,6 +28,8 @@ namespace AutoRest.CSharp.TemplateModels
         public string MethodGroupName { get; set; }
 
         public string MethodGroupType { get; set; }
+
+        protected HashSet<string> AdditionalNamespaces { get; private set; }
 
         public virtual IEnumerable<string> Usings
         {
@@ -36,6 +39,8 @@ namespace AutoRest.CSharp.TemplateModels
                 {
                     yield return this.ModelsName;
                 }
+                foreach (var ns in AdditionalNamespaces)
+                    yield return ns;
             }
         }
     }
